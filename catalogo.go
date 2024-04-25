@@ -47,3 +47,17 @@ func ListaProdutos() []model.Produto {
 	}
 	return produtos
 }
+
+func produtosPorNome(nome string) []model.Produto {
+
+	produtosCatalogo := ListaProdutos()
+
+	var produtosFiltrados []model.Produto
+
+	for _, produtos := range produtosCatalogo {
+		if produtos.Nome == nome {
+			produtosFiltrados = append(produtosFiltrados, produtos)
+		}
+	}
+	return produtosFiltrados
+}
