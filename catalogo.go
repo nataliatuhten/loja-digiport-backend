@@ -1,8 +1,12 @@
 package main
 
-import "github.com/nataliatuhten/loja-digiport-backend/model"
+import (
+	"errors"
 
-func ListaProdutos() []model.Produto {
+	"github.com/nataliatuhten/loja-digiport-backend/model"
+)
+
+/*func ListaProdutos() []model.Produto {
 	produtos := []model.Produto{
 		{
 			ID:         "5T9hR7",
@@ -46,9 +50,9 @@ func ListaProdutos() []model.Produto {
 			Imagem:     "rimel.png"},
 	}
 	return produtos
-}
+}*/
 
-func produtosPorNome(nome string) []model.Produto {
+/*func produtosPorNome(nome string) []model.Produto {
 
 	produtosCatalogo := ListaProdutos()
 
@@ -60,4 +64,28 @@ func produtosPorNome(nome string) []model.Produto {
 		}
 	}
 	return produtosFiltrados
+}*/
+
+var Produtos []model.Produto = []model.Produto{}
+
+func criarCatalogo(produtoNovo model.Produto) error {
+	for _, produto := range Produtos {
+		if produtoNovo.ID == produto.ID {
+			return errors.New("Produto com esse ID ja cadastrado")
+		}
+	}
+	Produtos = append(Produtos, produtoNovo)
+	return nil
+}
+
+func buscaProdutosPorNome(nome string) []model.Produto {
+	produtosEncontradosPorNome := []model.Produto{}
+
+	for _, produto := range Produtos {
+		if produto.Nome == nome {
+			produtosEncontradosPorNome = append(produtosEncontradosPorNome, produto)
+		}
+	}
+
+	return produtosEncontradosPorNome
 }
