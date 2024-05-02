@@ -71,7 +71,7 @@ var Produtos []model.Produto = []model.Produto{}
 func criarCatalogo(produtoNovo model.Produto) error {
 	for _, produto := range Produtos {
 		if produtoNovo.ID == produto.ID {
-			return errors.New("Produto com esse ID ja cadastrado")
+			return errors.New("produto com esse ID ja cadastrado")
 		}
 	}
 	Produtos = append(Produtos, produtoNovo)
