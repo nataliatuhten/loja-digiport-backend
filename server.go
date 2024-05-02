@@ -21,10 +21,11 @@ import (
 func StartServer() {
 	http.HandleFunc("/produtos", produtosHandler)
 
-	http.ListenAndServe(":8085", nil)
+	http.ListenAndServe(":8080", nil)
 }
 
 func produtosHandler(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method == "GET" {
 		getProdutos(w, r)
 	} else if r.Method == "POST" {
@@ -37,7 +38,12 @@ func addProduto(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&produto)
 
 	criarCatalogo(produto)
-
+	err := criarCatalogo(produto)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(model.Erro{ErrorMessage: err.Error()})
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
 }
 
