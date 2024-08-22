@@ -74,7 +74,3 @@ func BuscaProdutoPorNome(nomeProduto string) Produto {
 	defer db.Close()
 	return p
 }
-
-func CriaProduto(prod Produto) error {
-
-}
