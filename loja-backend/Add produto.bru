@@ -1,0 +1,21 @@
+meta {
+  name: Add produto
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/produto
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "nome": "Spring teste",
+      "preco": 19.9,
+      "descricao": "Spring teste",
+      "imagem": "livro.jpg",
+      "quantidadeEmEstoque": 4
+  }
+}

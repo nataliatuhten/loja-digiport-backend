@@ -1,5 +1,6 @@
 package db
 
+//DB_PASS=digport go run .
 import (
 	"database/sql"
 	"fmt"

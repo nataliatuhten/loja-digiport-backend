@@ -3,7 +3,9 @@ package model
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/nataliatuhten/loja-digiport-backend/db"
 )
 
@@ -73,4 +75,62 @@ func BuscaProdutoPorNome(nomeProduto string) Produto {
 
 	defer db.Close()
 	return p
+}
+
+func CriaProduto(prod Produto) error {
+
+	if produtoCadastrado(prod.Nome) {
+
+		fmt.Printf("Produto já cadastrado: %s\n", nome)
+		return fmt.Errorf("Produto ja cadastrado")
+	}
+
+	db := db.ConectaBancoDados()
+	id := uuid.NewString()
+	nome := prod.Nome
+	preco := prod.Preco
+	descricao := prod.Descricao
+	imagem := prod.Imagem
+	quantidade := prod.QuantidadeEmEstoque
+
+	strInsert := "INSERT INTO produtos VALUES($1, $2, $3, $4, $5, $6)"
+
+	result, err := db.Exec(strInsert, id, nome, strconv.FormatFloat(preco, 'f', 1, 64), descricao, imagem, strconv.Itoa(quantidade))
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	rowsAffected, err := result.RowsAffected()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Printf("Produto %s criado com sucesso (%d row affected)\n", id, rowsAffected)
+
+	defer db.Close()
+
+	return nil
+}
+
+func produtoCadastrado(nomeProduto string) bool {
+
+	prod := BuscaProdutoPorNome(nomeProduto)
+	return prod.Nome == nomeProduto
+
+}
+
+func RemoveProduto(id string) error {
+	db := db.ConectaBancoDados()
+	defer db.Close()
+	//resultado, err := db.Exec("DELETE FROM PRODUTOS WHERE id = $1", id)
+	_, err := db.Exec("DELETE FROM PRODUTOS WHERE id = $1", id)
+	if err != nil {
+		fmt.Printf("ocorreu um erro ao tentar excluir o produto %s", err.Error())
+		return fmt.Errorf("ocorreu um erro ao tentar excluir o produto %w", err)
+	}
+	fmt.Println("produto excluído")
+	return nil
+
 }
