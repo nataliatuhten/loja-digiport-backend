@@ -17,6 +17,8 @@ func HandleRequests() {
 
 	//usuario
 	route.HandleFunc("/usuarios", controller.CriaUsuarioHandler).Methods("POST")
+	//route.HandleFunc("/usuarios", controller.BuscaUsuarioPorEmail).Methods("GET")
+	//route.HandleFunc("/usuarios", controller.LoginHandler.Methods("POST")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
